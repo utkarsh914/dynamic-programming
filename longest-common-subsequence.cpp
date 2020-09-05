@@ -64,6 +64,29 @@ int lcs(string s1, string s2, int m, int n) {
 	return dp[m][n];
 }
 
+/*
+****************** BOTTOM UP IS FASTER *****************
+*/
+int lcs_bottom_up(string s1, string s2, int m, int n) {
+	
+	int dp[m+1][n+1];
+	
+	for (int i=0; i<=m; i++) {
+		for (int j=0; j<=n; j++) {
+			if (i==0 || j==0) dp[i][j]=0;
+			else if (s1[i-1]==s2[j-1]) {
+				dp[i][j] = 1 + dp[i-1][j-1];
+			}
+			else {
+				int l1 = dp[i][j-1];
+				int l2 = dp[i-1][j];
+				dp[i][j] = max(l1, l2);
+			}
+		}
+	}
+	return dp[m][n];
+}
+
 int main() {
 	ios_base::sync_with_stdio(false); cin.tie(NULL);
 	int t; cin>>t;
