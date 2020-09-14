@@ -34,6 +34,27 @@ Testcase 1: All the increasing subsequences are : (1,101); (1,2,3,100); (1,2,3,4
 #include<bits/stdc++.h>
 using namespace std;
 
+// ================= ALTERNATE ===============
+class Solution{
+	public:
+	int maxSumIS(int a[], int n)  
+	{
+		int dp[n+1];
+		for (int i=0; i<n; i++)
+			dp[i]=a[i];
+		
+		int ans=dp[0];
+		for (int i=1; i<n; i++) {
+			for (int j=0; j<i; j++) {
+				if (a[i] > a[j])
+					dp[i] = max(dp[i], dp[j]+a[i]);
+			}
+			ans=max(ans, dp[i]);
+		}
+		return ans;
+	}  
+};
+
 int lis(int arr[], int pos) {
 	int dp[pos+1];
 	// max sum of subsequence of first ele is itself
