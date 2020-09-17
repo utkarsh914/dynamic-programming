@@ -94,6 +94,6 @@ int main() {
 		int l1, l2; cin>>l1>>l2;
 		string s1, s2; cin>>s1>>s2;
 		memset(dp, -1, sizeof(dp));
-		cout<<lcs(s1, s2, l1-1, l2-1)<<el;
+		cout<<lcs_bottom_up(s1, s2, l1, l2)<<el;
 	}
 }
