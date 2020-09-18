@@ -66,54 +66,58 @@ Output:
 #define p_q priority_queue
 using namespace std;
 
-int las1(int arr[], int pos) {
-	vector<int> dp(pos+2, 1);
+// ============== O(N^2) time, O(n) space ===========
+
+int las(int arr[], int n) {
+	// n is length
+	int dp[n][2] = {{0}};
+	dp[0][0] = 1;
+	dp[0][1] = 1;
+
 	int ans = 1;
-	for (int i=1; i<=pos; i++) {
+	for (int i=1; i<n; i++) {
 		for (int j=0; j<i; j++) {
-			if (dp[j]%2==0 && arr[i]>arr[j]) {
-				dp[i] = max(dp[i], dp[j]+1);
+			if (arr[i] < arr[j]) {
+				dp[i][0] = max(dp[i][0], dp[j][1]+1);
 			}
-			else if (dp[j]%2==1 && arr[i]<arr[j]) {
-				dp[i] = max(dp[i], dp[j]+1);
+			if (arr[i] > arr[j]) {
+				dp[i][1] = max(dp[i][1], dp[j][0]+1);
 			}
-			ans = max(ans, dp[i]);
+			ans = max(ans, max(dp[i][0], dp[i][1]));
 		}
 	}
 	return ans;
 }
 
-int las2(int arr[], int pos) {
-	vector<int> dp(pos+2, 1);
-	int ans = 1;
-	for (int i=1; i<=pos; i++) {
-		for (int j=0; j<i; j++) {
-			if (dp[j]%2==1 && arr[i]>arr[j]) {
-				dp[i] = max(dp[i], dp[j]+1);
-			}
-			else if (dp[j]%2==0 && arr[i]<arr[j]) {
-				dp[i] = max(dp[i], dp[j]+1);
-			}
-			ans = max(ans, dp[i]);
-		}
-	}
-	return ans;
+/*
+=============== O(n) time, O(1) space ============
+*/
+int signum(int n) {
+	if (n==0)
+		return 0;
+	return (n>0) ? 1 : -1;
 }
 
-int c(int a[], int n) {
-	if (n==1 or n==2 or n==3)
-		return n;
-	int ans1=2, ans2=2;
-	for (int i=1; i<n-1; i++) {
-		if (a[i]<a[i-1] && a[i]<a[i+1])
-			ans1++;
+int lass(int a[], int n) {
+	// n is length
+	int len1 = 1, len2=1;
+	int prevSign = 0;
+	for (int i=1; i<n; i++) {
+		int currsign = signum(a[i]-a[i-1]);
+		if (currsign != prevSign and currsign != 0)
+			len1++, prevSign=currsign;
 	}
-	for (int i=1; i<n-1; i++) {
-		if (a[i]>a[i-1] && a[i]>a[i+1])
-			ans2++;
+	
+	prevSign=0;
+	for (int i=1; i<n; i++) {
+		int currsign = signum(a[i-1]-a[i]);
+		if (currsign != prevSign and currsign != 0)
+			len2++, prevSign=currsign;
 	}
-	return max(ans1, ans2);
+
+	return max(len1, len2);
 }
+
 
 int main() {
 	furr;
@@ -122,7 +126,6 @@ int main() {
 		int n; cin>>n;
 		int a[n];
 		for (int i=0; i<n; i++) cin>>a[i];
-		// cout << c(a,n) <<el;
-		cout << max(las1(a,n-1), las2(a,n-1)) <<el;
+		cout << lass(a,n) <<el;
 	}
 }
